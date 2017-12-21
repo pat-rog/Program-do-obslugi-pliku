@@ -7,6 +7,7 @@ using namespace std;
 //Deklaracje funkcji:
 void menu();
 void start();
+void check(char name[100]);
 
 
 
@@ -34,6 +35,7 @@ void start()
             file.open(name, ios::in | ios::out);
             if(file.good() == true)
             {
+                check(name);
                 file.close();
                 menu();
             }
@@ -124,6 +126,29 @@ void menu()
             menu();
             break;
         }
+    }
+}
+void check(char name[100])
+{
+    int amount_of_line = 0;
+    string line;
+    fstream file;
+    file.open(name, ios::in | ios::out);
+    if(file.good() == true)
+    {
+        while(!file.eof())
+        {
+            getline(file, line);
+            line = "";
+            amount_of_line = amount_of_line + 1;
+        }
+        amount_of_line = amount_of_line - 1;
+        cout << "linijka: " << line << endl; // It won't be forever! "It's only for test"
+        cout << "Liczba linijek: " << amount_of_line << endl; // It won't be forever! "It's only for test"
+    }
+    else
+    {
+        start();
     }
 }
 int main()
