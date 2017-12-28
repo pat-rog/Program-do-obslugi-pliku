@@ -9,6 +9,7 @@ void menu(char name[100]);
 void start();
 //void check(char name[100], int &amount_of_line);
 void show_dic(char name[100]);
+void show_file(char name[100]);
 
 
 
@@ -89,6 +90,7 @@ void menu(char name[100])
         }
         case 2:
         {
+            show_file(name);
             break;
         }
         case 3:
@@ -146,6 +148,7 @@ void menu(char name[100])
     }
 }
 */
+//Wypisz wszystkie katalogi
 void show_dic(char name[100])
 {
     fstream file;
@@ -187,9 +190,47 @@ void show_dic(char name[100])
         start();
     }
 }
-void show_file()
+//Wypisz wszystkie pliki
+void show_file(char name[100])
 {
-
+    fstream file;
+    string line_1, line_2, line_3;
+    file.open(name, ios::in | ios::out);;
+    if(file.good() == true)
+    {
+        while(!file.eof())
+        {
+            getline(file, line_1);
+            if(line_1.size()!=1 && line_1.size()!=0)
+            {
+                if(line_1.erase(13) == " Directory of") //|| line == "Directory of")
+                {
+                    while(!file.eof())
+                    {   
+                        getline(file, line_2);
+                        if(line_2.size()!=1 && line_2.size()!=0)
+                        {
+                            line_3 = line_2;
+                            line_3.erase(0, 21);
+                            line_3.erase(5);
+                            if(line_3.erase(5) == "     ")
+                            {
+                                line_2.erase(0,36);
+                                cout << line_2 << endl;
+                                line_2 = ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
+                            }
+                        }
+                    }
+                } 
+            }
+            line_1= ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
+        }
+        file.close();
+    }
+    else
+    {
+        start();
+    }
 }
 int main()
 {
