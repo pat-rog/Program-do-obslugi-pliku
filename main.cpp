@@ -5,9 +5,10 @@
 using namespace std;
 
 //Deklaracje funkcji:
-void menu();
+void menu(char name[100]);
 void start();
-void check(char name[100]);
+//void check(char name[100], int &amount_of_line);
+void show_dic(char name[100]);
 
 
 
@@ -35,12 +36,13 @@ void start()
             file.open(name, ios::in | ios::out);
             if(file.good() == true)
             {
-                check(name);
+                //check(name);
                 file.close();
-                menu();
+                menu(name);
             }
             else
             {
+                cout << "Nie ma pliku o takiej nazwie!" << endl;
                 start();
             }
             break;
@@ -54,19 +56,8 @@ void start()
             start();
         }
     }
-    cin >> name;
-    file.open(name, ios::in | ios::out);
-    if(file.good() == true)
-    {
-        file.close();
-        menu();
-    }
-    else
-    {
-        start();
-    }
 }
-void menu()
+void menu(char name[100])
 {
     cout << "|______________________________________________________________________________|" << endl;
     cout << "|------------------------------------------------------------------------------|" << endl;
@@ -93,6 +84,7 @@ void menu()
     {
         case 1:
         {
+            show_dic(name);
             break;
         }
         case 2:
@@ -123,14 +115,14 @@ void menu()
         }
         default:
         {
-            menu();
+            menu(name);
             break;
         }
     }
 }
-void check(char name[100])
+/*void check(char name[100], int &amount_of_line)
 {
-    int amount_of_line = 0;
+    amount_of_line = 0;
     string line;
     fstream file;
     file.open(name, ios::in | ios::out);
@@ -145,11 +137,59 @@ void check(char name[100])
         amount_of_line = amount_of_line - 1;
         cout << "linijka: " << line << endl; // It won't be forever! "It's only for test"
         cout << "Liczba linijek: " << amount_of_line << endl; // It won't be forever! "It's only for test"
+        file.seekg(0);
+        file.close();
+    }
+    else
+    {
+        start(amount_of_line);
+    }
+}
+*/
+void show_dic(char name[100])
+{
+    fstream file;
+    string line_1, line_2, line_3;
+    file.open(name, ios::in | ios::out);;
+    if(file.good() == true)
+    {
+        while(!file.eof())
+        {
+            getline(file, line_1);
+            if(line_1.size()!=1 && line_1.size()!=0)
+            {
+                if(line_1.erase(13) == " Directory of") //|| line == "Directory of")
+                {
+                    while(!file.eof())
+                    {   
+                        getline(file, line_2);
+                        if(line_2.size()!=1 && line_2.size()!=0)
+                        {
+                            line_3 = line_2;
+                            line_3.erase(0, 21);
+                            line_3.erase(5);
+                            if(line_3.erase(5) == "<DIR>")
+                            {
+                                line_2.erase(0,36);
+                                cout << line_2 << endl;
+                                line_2 = ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
+                            }
+                        }
+                    }
+                } 
+            }
+            line_1= ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
+        }
+        file.close();
     }
     else
     {
         start();
     }
+}
+void show_file()
+{
+
 }
 int main()
 {
