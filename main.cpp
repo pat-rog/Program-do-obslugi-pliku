@@ -1,21 +1,25 @@
 #include<iostream>
 #include<fstream>
 #include<string>
+#include<cstdlib>
 
 using namespace std;
 
 //Deklaracje funkcji:
-void menu(char name[100]);
+void menu(char name[100], int licznik);
 void start();
 //void check(char name[100], int &amount_of_line);
 void show_dic(char name[100]);
 void show_file(char name[100]);
+void comparison_size(char name[100], int licznik);
+void licznik_plikow(char name[100], int &licznik);
 
 
 
 //Definicje funkcji:
 void start()
 {
+    int licznik = 0;
     char name[100];
     fstream file;
     cout << "|______________________________________________________________________________|" << endl;
@@ -39,7 +43,7 @@ void start()
             {
                 //check(name);
                 file.close();
-                menu(name);
+                menu(name, licznik);
             }
             else
             {
@@ -58,7 +62,7 @@ void start()
         }
     }
 }
-void menu(char name[100])
+void menu(char name[100], int licznik)
 {
     cout << "|______________________________________________________________________________|" << endl;
     cout << "|------------------------------------------------------------------------------|" << endl;
@@ -95,6 +99,7 @@ void menu(char name[100])
         }
         case 3:
         {
+            comparison_size(name,licznik);
             break;
         }
         case 4:
@@ -117,7 +122,7 @@ void menu(char name[100])
         }
         default:
         {
-            menu(name);
+            menu(name,licznik);
             break;
         }
     }
@@ -232,41 +237,155 @@ void show_file(char name[100])
         start();
     }
 }
+void licznik_plikow(char name[100], int &licznik)
+{
+    fstream file;
+    string line_1, line_2, line_3;
+    file.open(name, ios::in | ios::out);;
+    if(file.good() == true)
+    {
+        while(!file.eof())
+        {
+            getline(file, line_1);
+            if(line_1.size()!=1 && line_1.size()!=0)
+            {
+                if(line_1.erase(13) == " Directory of") //|| line == "Directory of")
+                {
+                    while(!file.eof())
+                    {   
+                        getline(file, line_2);
+                        if(line_2.size()!=1 && line_2.size()!=0)
+                        {
+                            line_3 = line_2;
+                            line_3.erase(0, 21);
+                            line_3.erase(5);
+                            if(line_3.erase(5) == "     ")
+                            {
+                                line_2.erase(0,36);
+                                licznik = licznik + 1;
+                                line_2 = ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
+                            }
+                        }
+                    }
+                } 
+            }
+            line_1= ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
+        }
+        file.close();
+    }
+    else
+    {
+        start();
+    }
+}
+//Porównaj wielkość wybranych plików
+void comparison_size(char name[100], int licznik)
+{
+    licznik_plikow(name,licznik);
+    int licznik_2 = 0;
+    fstream file;
+    string line_1, line_2, line_3, line_4;
+    string *tab1 = new string[licznik];
+    int *value = new int[licznik];
+    file.open(name, ios::in | ios::out);
+    if(file.good() == true)
+    {
+        while(!file.eof())
+        {
+            getline(file, line_1);
+            if(line_1.size()!=1 && line_1.size()!=0)
+            {
+                if(line_1.erase(13) == " Directory of") //|| line == "Directory of")
+                {
+                    while(!file.eof())
+                    {   
+                        getline(file, line_2);
+                        if(line_2.size()!=1 && line_2.size()!=0)
+                        {
+                            line_4 = line_2;
+                            line_3 = line_2;
+                            line_3.erase(0, 21);
+                            line_3.erase(5);
+                            if(line_3.erase(5) == "     ")
+                            {
+                                line_2.erase(0,36);
+                                line_4.erase(0,19);
+                                line_4.erase(17);
+                                //scout << atoi(line_4.c_str()) << endl;
+                                value[licznik_2] = atoi(line_4.c_str());
+                                tab1[licznik_2] = line_2;
+                                licznik_2 = licznik_2 + 1;
+                                line_2 = ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
+                            }
+                        }
+                    }
+                } 
+            }
+            line_1= ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
+        }
+        file.close();
+        cout << "Lista plików: " << endl;
+        //Przydziela numery plikom
+        for(int j=0; j<licznik; j++)
+        {
+          cout << j << "." << tab1[j] << endl;
+        }
+        cout << "Ilość plików, które chcesz porównać: ";
+        int ile;
+        cin >> ile;
+        int *tab2 = new int[ile];
+        //Pobiera od użytkownika numery plików
+        for(int k=0; k<ile; k++)
+        {
+            cout << "Numer wybranego pliku: ";
+            cin >> tab2[k];
+        }
+        int l; //zmienna pomocnicza
+        int *value_choosen = new int[ile];
+        int rozmiar;
+        rozmiar = ile - 1; // zmienna do algorytmu bąbelkowego
+        for(int m=0; m<ile; m++)
+        {
+            l = tab2[m];
+            value_choosen[m] = value[l];
+        }
+        //algorytm sortujący wielkości wybranych plików od najmniejszej
+        int bufor;
+        for(int a=0; a<rozmiar; a++)
+        {
+            for(int b=0; b<rozmiar; b++)
+            {
+                if(value_choosen[b]>value_choosen[b+1])
+                {
+                    bufor = value_choosen[b+1];
+                    value_choosen[b+1] = value_choosen[b];
+                    value_choosen[b] = bufor;
+                }
+            }
+        }
+        cout << "Wybrane pliki w kolejności od najmniejszego" << endl;
+        for(int d=0; d<ile; d++)
+        {
+            for(int e=0; e<licznik; e++)
+            {
+                if(value_choosen[d]==value[e])
+                {
+                    cout << tab1[e] << endl;
+                }
+            }
+        }
+        delete[] tab1;
+        delete[] tab2;
+        delete[] value;
+        delete[] value_choosen;
+    }
+    else
+    {
+        start();
+    }
+}
 int main()
 {
     start();
-    //fstream plik;
-    //string tab[10];
-    //plik.open("plik1.txt", std::ios::in | std::ios::out);
-    /*if(plik.good() == true)
-    {
-        string x;
-        int licznik = 0;
-        for(int i=0; i<10; i++)
-        {
-           getline(plik,x);
-           licznik = licznik + 1;
-           x.clear();
-           cout << x;
-        }
-        cout << licznik << endl;
-        cout << x;
-        plik.close();
-    }
-    */
-    
-    //if(plik.good() == true)
-    //{
-        //for(int i=0; i<10; i++)
-        //{
-          // getline(plik, tab[i]);
-           //tab[i].erase(0, 6);
-       // }
-        //plik.close();
-    //}
-    //for(int j=0; j<10; j++)
-    //{
-        //cout << "Tab: " << tab[j] << endl;
-    //}
     return 0;
 }
