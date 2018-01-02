@@ -8,12 +8,12 @@ using namespace std;
 //Deklaracje funkcji:
 void menu(char name[100], int licznik);
 void start();
-//void check(char name[100], int &amount_of_line);
 void show_dic(char name[100]);
 void show_file(char name[100]);
 void comparison_size(char name[100], int licznik);
 void licznik_plikow(char name[100], int &licznik);
 void comparison_change(char name[100], int licznik);
+void files(char name[100], int licznik);
 
 
 
@@ -63,6 +63,7 @@ void start()
         }
     }
 }
+//Menu
 void menu(char name[100], int licznik)
 {
     cout << "|______________________________________________________________________________|" << endl;
@@ -91,25 +92,31 @@ void menu(char name[100], int licznik)
         case 1:
         {
             show_dic(name);
+            menu(name,licznik);
             break;
         }
         case 2:
         {
             show_file(name);
+            menu(name,licznik);
             break;
         }
         case 3:
         {
             comparison_size(name,licznik);
+            menu(name,licznik);
             break;
         }
         case 4:
         {
             comparison_change(name,licznik);
+            menu(name,licznik);
             break;
         }
         case 5:
         {
+            files(name,licznik);
+            menu(name,licznik);
             break;
         }
         case 6:
@@ -129,32 +136,6 @@ void menu(char name[100], int licznik)
         }
     }
 }
-/*void check(char name[100], int &amount_of_line)
-{
-    amount_of_line = 0;
-    string line;
-    fstream file;
-    file.open(name, ios::in | ios::out);
-    if(file.good() == true)
-    {
-        while(!file.eof())
-        {
-            getline(file, line);
-            line = "";
-            amount_of_line = amount_of_line + 1;
-        }
-        amount_of_line = amount_of_line - 1;
-        cout << "linijka: " << line << endl; // It won't be forever! "It's only for test"
-        cout << "Liczba linijek: " << amount_of_line << endl; // It won't be forever! "It's only for test"
-        file.seekg(0);
-        file.close();
-    }
-    else
-    {
-        start(amount_of_line);
-    }
-}
-*/
 //Wypisz wszystkie katalogi
 void show_dic(char name[100])
 {
@@ -499,6 +480,163 @@ void comparison_change(char name[100], int licznik)
     {
         start();
     }
+}
+//Wypisz pliki, które nazwę zaczynają frazą podaną z klawiatury
+void files(char name[100], int licznik)
+{
+    licznik_plikow(name,licznik);
+    int licznik_2 = 0;
+    fstream file;
+    string line_1, line_2, line_3, line_4, line_5, line_6, line_7;
+    string *tab1 = new string[licznik];  //nazwy plików
+    string *tab3 = new string[licznik];
+    string *tab4 = new string[licznik];
+    string *tab5 = new string[licznik];
+    string *tab6 = new string[licznik];
+    file.open(name, ios::in | ios::out);
+    if(file.good() == true)
+    {
+        while(!file.eof())
+        {
+            getline(file, line_1);
+            if(line_1.size()!=1 && line_1.size()!=0)
+            {
+                if(line_1.erase(13) == " Directory of") //|| line == "Directory of")
+                {
+                    while(!file.eof())
+                    {   
+                        getline(file, line_2);
+                        if(line_2.size()!=1 && line_2.size()!=0)
+                        {
+                            line_3 = line_2;
+                            line_3.erase(0, 21);
+                            line_3.erase(5);
+                            if(line_3.erase(5) == "     ")
+                            {
+                                //Pobieranie nazwy pliku
+                                line_2.erase(0,36);
+                                tab1[licznik_2] = line_2;
+                                //Opracowanie fraz
+                                line_4 = line_2;
+                                line_5 = line_2;
+                                line_6 = line_2;
+                                line_7 = line_2;
+                                line_4.erase(1);
+                                tab3[licznik_2] = line_4;
+                                line_5.erase(2);
+                                tab4[licznik_2] = line_5;
+                                line_6.erase(3);
+                                tab5[licznik_2] = line_6;
+                                line_7.erase(4);
+                                tab6[licznik_2] = line_7;
+                                licznik_2 = licznik_2 + 1;
+                                line_2 = ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
+                                line_4 = "";
+                                line_5 = "";
+                                line_6 = "";
+                                line_7 = "";
+                            }
+                        }
+                    }
+                } 
+            }
+            line_1= ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
+        }
+        file.close();
+        //Podanie liczby plików
+        cout << "Ilość plików, które chcesz wypisać: ";
+        int ile;
+        cin >> ile;
+        //Podanie ilości znaków
+        int choice;
+        cout << "Wybierz z ilu pierwszych znaków nazwy pliku ma składać się podana fraza: " << endl;
+        cout << "Wybierz 1, jeśli fraza zawiera pierwszy znak z nazwy pliku" << endl;
+        cout << "Wybierz 2, jeśli fraza zawiera dwa pierwsze znaki z nazwy pliku" << endl;
+        cout << "Wybierz 3, jeśli fraza zawiera trzy pierwsze znaki z nazwy pliku" << endl;
+        cout << "Wybierz 4, jeśli fraza zawiera cztery pierwsze znaki z nazwy pliku" << endl;
+        cin >> choice;
+        string *fraza = new string[ile]; 
+        for(int j=0; j<ile; j++)
+        {
+            cout << "Fraza: ";
+            cin >> fraza[j];
+        }
+        switch(choice)
+        {
+            case 1:
+            {
+                for(int a=0; a<ile; a++)
+                {
+                    for(int b=0; b<licznik_2; b++)
+                    {
+                        if(fraza[a]==tab3[b])
+                        {
+                            cout << tab1[b] << endl;
+                        }
+                    }
+                }
+                break;
+            }
+            case 2:
+            {
+                for(int a=0; a<ile; a++)
+                {
+                    for(int b=0; b<licznik_2; b++)
+                    {
+                        if(fraza[a]==tab4[b])
+                        {
+                            cout << tab1[b] << endl;
+                        }
+                    }
+                }
+                break;
+            }
+            case 3:
+            {
+                for(int a=0; a<ile; a++)
+                {
+                    for(int b=0; b<licznik_2; b++)
+                    {
+                        if(fraza[a]==tab5[b])
+                        {
+                            cout << tab1[b] << endl;
+                        }
+                    }
+                }
+                break;
+            }
+            case 4:
+            {
+                for(int a=0; a<ile; a++)
+                {
+                    for(int b=0; b<licznik_2; b++)
+                    {
+                        if(fraza[a]==tab6[b])
+                        {
+                            cout << tab1[b] << endl;
+                        }
+                    }
+                }
+                break;
+            }
+            default:
+            {
+                files(name,licznik);
+            }
+
+        }
+        delete[] tab1;
+        delete[] tab3;
+        delete[] tab4;
+        delete[] tab5;
+        delete[] tab6;
+        delete[] fraza;
+    }
+    else
+    {
+        start();
+    }
+     
 }
 int main()
 {
