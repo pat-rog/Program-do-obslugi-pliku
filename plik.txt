@@ -1,0 +1,27 @@
+ Volume in drive C is Windows
+ Volume Serial Number is A09B-C51A
+
+ Directory of C:\Users\Patryk
+
+22.12.2017  20:39    <DIR>          .
+22.12.2017  20:39    <DIR>          ..
+12.10.2017  22:34    <DIR>          .android
+12.10.2017  22:32    <DIR>          .cordova
+14.12.2017  12:41    <DIR>          Contacts
+21.12.2017  09:39    <DIR>          Desktop
+14.12.2017  12:41    <DIR>          Documents
+14.12.2017  12:41    <DIR>          Downloads
+14.12.2017  12:41    <DIR>          Favorites
+14.12.2017  12:41    <DIR>          Links
+14.12.2017  12:41    <DIR>          Music
+06.12.2017  13:44    <DIR>          OneDrive
+14.12.2017  12:41    <DIR>          Pictures
+23.12.2017  20:39                 20plik.txt
+14.12.2017  12:41    <DIR>          Saved Games
+14.12.2017  12:41    <DIR>          Searches
+12.10.2017  20:02    <DIR>          source
+22.12.2017  20:38                 10test1.txt
+22.12.2017  20:38                 2 test2.txt
+14.12.2017  12:41    <DIR>          Videos
+               3 File(s)              0 bytes
+              17 Dir(s)  16ÿ814ÿ714ÿ880 bytes free

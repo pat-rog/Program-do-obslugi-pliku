@@ -49,9 +49,10 @@ void start()
             else
             {
                 cout << "Nie ma pliku o takiej nazwie!" << endl;
+                
                 start();
             }
-            break;
+           // break;
         }
         case 2:
         {
@@ -294,8 +295,11 @@ void comparison_size(char name[100], int licznik)
                                 line_2.erase(0,36);
                                 line_4.erase(0,19);
                                 line_4.erase(17);
+                                cout << line_4;
                                 //scout << atoi(line_4.c_str()) << endl;
                                 value[licznik_2] = atoi(line_4.c_str());
+
+                                cout << value[licznik_2] << endl;
                                 tab1[licznik_2] = line_2;
                                 licznik_2 = licznik_2 + 1;
                                 line_2 = ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
@@ -375,7 +379,7 @@ void comparison_change(char name[100], int licznik)
     fstream file;
     string line_1, line_2, line_3, line_4;
     string *tab1 = new string[licznik];  //nazwy plików
-    int *tab3 = new int[licznik];
+    string *tab3 = new string[licznik]; //tablica do zapisania rozmiaru plików
     file.open(name, ios::in | ios::out);
     if(file.good() == true)
     {
@@ -406,9 +410,15 @@ void comparison_change(char name[100], int licznik)
                                 line_4.erase(8,2);
                                 line_4.erase(10,1);
                                 line_4.erase(12);
-                                tab3[licznik_2] = atoi(line_4.c_str());
+                                //cout << line_4 << endl;
+                                //cout << line_4.size() << endl;
+                                //Wpisanie wartości do tablicy
+                                tab3[licznik_2] = line_4;
+                                //Obliczanie obiegów pętli
                                 licznik_2 = licznik_2 + 1;
                                 line_2 = ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
+                                line_3 = ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
+                                line_4 = ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
                             }
                         }
                     }
@@ -417,22 +427,142 @@ void comparison_change(char name[100], int licznik)
             line_1= ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
         }
         file.close();
-        cout << "Lista plików: " << endl;
-        //Przydziela numery plikom
-        for(int j=0; j<licznik; j++)
-        {
-          cout << j << "." << tab1[j] << endl;
-        }
-        cout << "Ilość plików, które chcesz porównać: ";
-        int ile;
-        cin >> ile;
+        
+        //cout << (int)"231220172039";
+        int ile, value2, date2, time2;
+        //cin >> ile;
         int *tab2 = new int[ile];
-        //Pobiera od użytkownika numery plików
-        for(int k=0; k<ile; k++)
+        string date1, time1, value;
+        cout << "Data i czas modyfikacji: (uwaga! Podaj najpierw datę, np. 02.01.2018, a następnie czas, np. 10:21" << endl;
+        cout << "data: " ;
+        cin >> date1;
+        cout << endl;
+        cout << "czas: " ;
+        cin >> time1;
+        cout << endl;
+        int *date_choosen = new int[licznik];
+        //Wyznaczenie liczby określającej datę
+        date1.erase(2,1);
+        date1.erase(4,1);
+        date1.erase(8,2);
+        //Wyznaczenie liczby określającej godzinę
+        time1.erase(2,1);
+        //Wyznaczanie końcowej wartości wprowadzonego pliku
+        value = date1 + time1;
+        /////////////////////////////////////////////////////
+        int *tab4 = new int[licznik];
+        string linia1; //zmienna pomocnicza
+        int linia2;
+        //
+        //Petla testowa
+        for(int a=0; a<licznik; a++)
         {
-            cout << "Numer wybranego pliku: ";
-            cin >> tab2[k];
+            //
+            cout << "Warość z tablicy: " << tab3[a] << endl;
+            linia1 = tab3[a];
+            cout << "Wartosc ze zmiennej: " << linia1 << endl;
+            linia2 = atoi(linia1.c_str());
+            cout << "Wartość po konwersji: " << linia2 << endl;
+            //cout << endl;
+            //cout << atoi(linia1.c_str());
+            //cout << tab3[a] << endl;
+            //linia = tab3[a];
+            //tab4[a] = atoi(linia.c_str());
         }
+        //cout << "Sprawdzanie czy poza pętlą działa" << endl;
+       // linia2 = stoi(linia1);
+        //cout << linia2;
+        for(int b=0; b<licznik; b++)
+        {
+            cout << "test" <<  tab4[b] << endl;
+        }
+        
+        int polecenie;
+        int licznik_3 = 0;
+        cout << "Wybierz właściwe polecenie 1 - 3" << endl;
+        cout << "1. Wyświetl pliki o czasie modyfikacji wcześniejszym niż ten podany z klawiatury" << endl;
+        cout << "2. Wyświetl pliki o czasie modyfikacji późniejszym niż ten podany z klawiatury" << endl;
+        cout << "3. Wyświetl pliki o czasie modyfikacji takim samym jak ten podany z klawiatury" << endl;
+        cin >> polecenie;
+        /*
+        switch(polecenie)
+        {
+            case 1:
+            {
+                cout << "ok##";
+                //Pętla wyszukująca numery plików wcześniejszych niż ten podany z klawiatury
+                for(int x=0; x<licznik; x++)
+                {
+                     cout << "ok#";
+                    if(tab3[x]<value2)
+                    {
+                        cout << "ok";
+                        date_choosen[x] = licznik_3;
+                    }
+                    licznik_3 = licznik_3 + 1;
+                }
+                break;
+            }
+            case 2:
+            {
+                cout << "ok##";
+                //Pętla wyszukująca numery plików późniejszych niż ten podany z klawiatury
+                for(int y=0; y<licznik; y++)
+                {
+                    cout << "ok#";
+                    if(tab3[y]>value2)
+                    {
+                        cout << "ok";
+                        date_choosen[y] = licznik_3;
+                    }
+                    licznik_3 = licznik_3 + 1;
+                }
+                break;
+            }
+            case 3:
+            {
+                cout << "ok##";
+                //Pętla wyszukująca numery plików takich samych jak te podane z klawiatury
+                for(int z=0; z<licznik; z++)
+                {
+                    cout << "ok#";
+                    if(tab3[z]==value2)
+                    {
+                        cout << "ok";
+                        date_choosen[z] = licznik_3;
+                    }
+                    licznik_3 = licznik_3 + 1;
+                }
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+        
+        int l; //zmienna pomocniczna
+        for(int ab=0; ab<licznik; ab++)
+        {
+            l = date_choosen[ab];
+            cout << tab1[l] << endl;
+        }
+       // for(int x=0; x<licznik; x++)
+        //{
+        //    if(value==tab3[x])
+
+//
+      //  }
+        
+
+        //Pobiera od użytkownika numery plików
+        //for(int k=0; k<ile; k++)
+        //{
+          //  cout << "Numer wybranego pliku: ";
+           // cin >> tab2[k];
+        //}
+
+        /*
         int l; //zmienna pomocnicza
         int rozmiar;
         rozmiar = ile - 1; // zmienna do algorytmu bąbelkowego
@@ -460,21 +590,24 @@ void comparison_change(char name[100], int licznik)
                 //}
             }
         }
-        cout << "Wybrane pliki w kolejności od ostaniej modyfikacji" << endl;
+        //cout << "Wybrane pliki w kolejności od ostaniej modyfikacji" << endl;
         for(int d=0; d<ile; d++)
         {
             for(int e=0; e<licznik; e++)
             {
                 if(date_choosen[d]==tab3[e])
                 {
-                   cout << tab1[e] << endl;
+                  // cout << tab1[e] << endl;
                 }
             }
         }
+        */
         delete[] tab1;
         delete[] tab2;
         delete[] tab3;
+        delete[] tab4;
         delete[] date_choosen;
+
     }
     else
     {
