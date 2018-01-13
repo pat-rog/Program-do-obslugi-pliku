@@ -15,8 +15,6 @@ void licznik_plikow(char name[100], int &licznik);
 void comparison_change(char name[100], int licznik);
 void files(char name[100], int licznik);
 
-
-
 //Definicje funkcji:
 void start()
 {
@@ -379,7 +377,17 @@ void comparison_change(char name[100], int licznik)
     fstream file;
     string line_1, line_2, line_3, line_4;
     string *tab1 = new string[licznik];  //nazwy plików
-    long long *tab3 = new long long[licznik]; //tablica do zapisania rozmiaru plików
+    int *year1 = new int[licznik];
+    int *month1 = new int[licznik];
+    int *day1 = new int[licznik];
+    int *hour1 = new int[licznik];
+    int *minute1 = new int[licznik];
+    string year2;
+    string month2;
+    string day2;
+    string hour2;
+    string minute2;
+    
     file.open(name, ios::in | ios::out);
     if(file.good() == true)
     {
@@ -411,7 +419,34 @@ void comparison_change(char name[100], int licznik)
                                 line_4.erase(10,1);
                                 line_4.erase(12);
                                 //Wpisanie wartości do tablicy
-                                tab3[licznik_2] = atoll(line_4.c_str());
+                                //Rok:
+                                year2 = line_4;
+                                year2.erase(0,4);
+                                year2.erase(4);
+                                year1[licznik_2] = atoi(year2.c_str());
+                                cout << "rok: " << year1[licznik_2] << endl;
+                                //Miesiąc
+                                month2 = line_4;
+                                month2.erase(0,2);
+                                month2.erase(2);
+                                month1[licznik_2] = atoi(month2.c_str());
+                                cout << "miesiąc: " << month1[licznik_2] << endl;
+                                //Dzień
+                                day2 = line_4;
+                                day2.erase(2);
+                                day1[licznik_2] = atoi(day2.c_str());
+                                cout << "dzień " << day1[licznik_2] << endl; 
+                                //Godzina
+                                hour2 = line_4;
+                                hour2.erase(0,8);
+                                hour2.erase(2);
+                                hour1[licznik_2] = atoi(hour2.c_str());
+                                cout << "godzina: " << hour1[licznik_2] << endl;
+                                //Minuta
+                                minute2 = line_4;
+                                minute2.erase(0,10);
+                                minute1[licznik_2] = atoi(minute2.c_str());
+                                cout << "minuta: " << minute1[licznik_2] << endl;
                                 //Obliczanie obiegów pętli
                                 licznik_2 = licznik_2 + 1;
                                 line_2 = ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
@@ -428,105 +463,176 @@ void comparison_change(char name[100], int licznik)
         
         //cin >> ile;
         //int *tab2 = new int[ile];
-        string date1, time1, value;
-        long long value2;
+        string date, time, value, bufor_year, bufor_month, bufor_day, bufor_hour, bufor_minute;
+
+        int date_year, date_month, date_day; //zmienne dla wpisanego roku, miesiąca i dnia
+        int time_hour, time_minute; //zmienne dla wpisanej godziny i minuty
         cout << "Data i czas modyfikacji: (uwaga! Podaj najpierw datę, np. 02.01.2018, a następnie czas, np. 10:21" << endl;
         cout << "data: " ;
-        cin >> date1;
+        cin >> date;
         cout << endl;
         cout << "czas: " ;
-        cin >> time1;
+        cin >> time;
         cout << endl;
-        int *date_choosen = new int[licznik];
+        string *date_choosen = new string[licznik];
         //Wyznaczenie liczby określającej datę
-        date1.erase(2,1);
-        date1.erase(4,1);
-        date1.erase(8,2);
-        //Wyznaczenie liczby określającej godzinę
-        time1.erase(2,1);
-        //Wyznaczanie końcowej wartości wprowadzonego pliku i konwersja
-        value = date1 + time1;
-        value2 = atoll(value.c_str());
+        date.erase(2,1);
+        date.erase(4,1);
+        date.erase(8,2);
+        //Rok:
+        bufor_year = date;
+        bufor_year.erase(0,4);
+        date_year = atoi(bufor_year.c_str());
+        cout << date_year << endl;
+        //Miesiąc
+        bufor_month = date;
+        bufor_month.erase(0,2);
+        bufor_month.erase(2);
+        date_month = atoi(bufor_month.c_str());
+        cout << date_month << endl;
+        //Dzień
+        bufor_day = date;
+        bufor_day.erase(2);
+        date_day = atoi(bufor_day.c_str());
+        cout << date_day << endl;
+        //Godzina
+        bufor_hour = time;
+        bufor_hour.erase(2);
+        time_hour = atoi(bufor_hour.c_str());
+        cout << time_hour << endl;
+        //Minuta
+        bufor_minute = time;
+        bufor_minute.erase(0,3);
+        time_minute = atoi(bufor_minute.c_str());
+        cout << time_minute << endl;
         ///////////////////////////////////////////////////// 
         int polecenie;
-        int licznik_3 = 0;
-        int *date_file = new int[licznik];
         int elementy = 0;
+        int indeks;
+        int rozmiar;
+        int l; //zmienna pomocnicza
         cout << "Wybierz właściwe polecenie 1 - 3" << endl;
         cout << "1. Wyświetl pliki o czasie modyfikacji wcześniejszym niż ten podany z klawiatury" << endl;
         cout << "2. Wyświetl pliki o czasie modyfikacji późniejszym niż ten podany z klawiatury" << endl;
         cout << "3. Wyświetl pliki o czasie modyfikacji takim samym jak ten podany z klawiatury" << endl;
         cin >> polecenie;
-        
+
         switch(polecenie)
         {
             case 1:
             {
-                //Pętla wyszukująca numery plików wcześniejszych niż ten podany z klawiatury
-                for(int x=0; x<licznik; x++)
+                for(int i=0; i<licznik_2; i++)
                 {
-                    if(tab3[x]<value2)
+                    if(year1[i]<date_year)
                     {
-                        date_file[x] = tab3[x];
-                        date_choosen[elementy] = licznik_3;
-                        elementy++;
+                        cout << tab1[i] << endl;
                     }
-                    licznik_3 = licznik_3 + 1;
+                    else if(year1[i]==date_year)
+                    {
+                       if(month1[i]<date_month)
+                       {
+                           cout << tab1[i] << endl;
+                       }
+                       else if(month1[i]==date_month)
+                       {
+                           if(day1[i]<date_day)
+                           {
+                               cout << tab1[i] << endl;
+                           }
+                           else if(day1[i]==date_day)
+                           {
+                               if(hour1[i]<time_hour)
+                               {
+                                   cout << tab1[i] << endl;
+                               }
+                               else if(hour1[i]==time_hour)
+                               {
+                                   if(minute1[i]<time_minute)
+                                   {
+                                       cout << tab1[i] << endl;
+                                   }
+                               }
+                           }
+                       }
+                    }
                 }
                 break;
             }
             case 2:
             {
-                //Pętla wyszukująca numery plików późniejszych niż ten podany z klawiatury
-                for(int y=0; y<licznik; y++)
+                for(int i=0; i<licznik_2; i++)
                 {
-                    if(tab3[y]>value2)
+                    if(year1[i]>date_year)
                     {
-                        date_file[y] = tab3[y];
-                        date_choosen[elementy] = licznik_3;
-                        elementy++;
+                        cout << tab1[i] << endl;
                     }
-                    licznik_3 = licznik_3 + 1;
+                    else if(year1[i]==date_year)
+                    {
+                       if(month1[i]>date_month)
+                       {
+                           cout << tab1[i] << endl;
+                       }
+                       else if(month1[i]==date_month)
+                       {
+                           if(day1[i]>date_day)
+                           {
+                               cout << tab1[i] << endl;
+                           }
+                           else if(day1[i]==date_day)
+                           {
+                               if(hour1[i]>time_hour)
+                               {
+                                   cout << tab1[i] << endl;
+                               }
+                               else if(hour1[i]==time_hour)
+                               {
+                                   if(minute1[i]>time_minute)
+                                   {
+                                       cout << tab1[i] << endl;
+                                   }
+                               }
+                           }
+                       }
+                    }
                 }
                 break;
             }
             case 3:
             {
-                //Pętla wyszukująca numery plików takich samych jak te podane z klawiatury
-                for(int z=0; z<licznik; z++)
+                for(int i=0; i<licznik_2; i++)
                 {
-                    if(tab3[z]==value2)
+                    if(year1[i]==date_year)
                     {
-                        date_file[z] = tab3[z];
-                        date_choosen[elementy] = licznik_3;
-                        elementy++;
+                        if(month1[i]==date_month)
+                        {
+                            if(day1[i]==date_day)
+                            {
+                                if(hour1[i]==time_hour)
+                                {
+                                    if(minute1[i]==time_minute)
+                                    {
+                                        cout << tab1[i] << endl;
+                                    }
+                                }
+                            }
+                        }
                     }
-                    licznik_3 = licznik_3 + 1;
                 }
                 break;
             }
             default:
             {
-                break;
+
             }
         }
-        //Wyświetlenie rezultatów
-        int indeks;
-        for(int i=0; i<elementy; i++)
-        {
-            indeks = date_choosen[i];
-            cout << "Plik: ";
-            cout << tab1[indeks];
-
-        }
-
+        ////////////////////////////////////
         delete[] tab1;
-       // delete[] tab2;
-        delete[] tab3;
-       //++ delete[] tab4;
         delete[] date_choosen;
-        delete[] date_file;
-
+        delete[] year1;
+        delete[] month1;
+        delete[] day1;
+        delete[] hour1;
+        delete[] minute1;
     }
     else
     {
