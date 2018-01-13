@@ -268,7 +268,7 @@ void comparison_size(char name[100], int licznik)
     fstream file;
     string line_1, line_2, line_3, line_4;
     string *tab1 = new string[licznik];
-    int *value = new int[licznik];
+    long long *values = new long long[licznik];
     file.open(name, ios::in | ios::out);
     if(file.good() == true)
     {
@@ -293,11 +293,9 @@ void comparison_size(char name[100], int licznik)
                                 line_2.erase(0,36);
                                 line_4.erase(0,19);
                                 line_4.erase(17);
-                                cout << line_4;
-                                //scout << atoi(line_4.c_str()) << endl;
-                                value[licznik_2] = atoi(line_4.c_str());
-
-                                cout << value[licznik_2] << endl;
+                                //cout << "Rozmiary" << line_4 << endl;        
+                                values[licznik_2]= atoll(line_4.c_str());
+                                //cout << "Rozmiary z tablicy: " << values[licznik_2] << endl;                      
                                 tab1[licznik_2] = line_2;
                                 licznik_2 = licznik_2 + 1;
                                 line_2 = ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
@@ -309,60 +307,138 @@ void comparison_size(char name[100], int licznik)
             line_1= ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
         }
         file.close();
-        cout << "Lista plików: " << endl;
-        //Przydziela numery plikom
-        for(int j=0; j<licznik; j++)
+        cout << endl;
+        long long size;
+        cout << "Podaj wielkość pliku: ";
+        cin >> size;
+        cout << endl;
+        cout << "|--------------------------------------------------------------------------------|" << endl;
+        cout << "| Wybierz polecenie, podając odpowiednią cyfrę:                                  |" << endl;
+        cout << "|--------------------------------------------------------------------------------|" << endl;
+        cout << "| 1. Wypisz pliki, których wielkość jest większa od zadanej z klawiatury.        |" << endl;
+        cout << "|--------------------------------------------------------------------------------|" << endl;
+        cout << "| 2. Wypisz pliki, których wielkość jest mniejsza od zadanej z klawiatury.       |" << endl;
+        cout << "|--------------------------------------------------------------------------------|" << endl;
+        cout << "| 3. Wypisz pliki, których wielkość jest równa zadanej z klawiatury.             |" << endl;
+        cout << "|--------------------------------------------------------------------------------|" << endl;
+        cout << endl;
+        int choice;
+        cin >> choice;
+        long long *values_sorted = new long long[licznik_2];
+        int help = 0; //zmienna pomocnicza, aby nie było luk
+        if(choice==1)
         {
-          cout << j << "." << tab1[j] << endl;
-        }
-        cout << "Ilość plików, które chcesz porównać: ";
-        int ile;
-        cin >> ile;
-        int *tab2 = new int[ile];
-        //Pobiera od użytkownika numery plików
-        for(int k=0; k<ile; k++)
-        {
-            cout << "Numer wybranego pliku: ";
-            cin >> tab2[k];
-        }
-        int l; //zmienna pomocnicza
-        int *value_choosen = new int[ile];
-        int rozmiar;
-        rozmiar = ile - 1; // zmienna do algorytmu bąbelkowego
-        for(int m=0; m<ile; m++)
-        {
-            l = tab2[m];
-            value_choosen[m] = value[l];
-        }
-        //algorytm sortujący wielkości wybranych plików od najmniejszej
-        int bufor;
-        for(int a=0; a<rozmiar; a++)
-        {
-            for(int b=0; b<rozmiar; b++)
+            cout << "Pliki o rozmiarze większym niż zadany z klawiatury." << endl;
+            cout << "Pliki wyświetlone w kolejności od pliku o najmniejszym rozmiarze rosnąco!" << endl;
+            cout << endl;
+            for(int i=0; i<licznik_2; i++)
             {
-                if(value_choosen[b]>value_choosen[b+1])
+                if(size<values[i])
                 {
-                    bufor = value_choosen[b+1];
-                    value_choosen[b+1] = value_choosen[b];
-                    value_choosen[b] = bufor;
+                    values_sorted[help] = values[i];
+                    help = help + 1;
+                }
+            }
+            //Sortowanie tablicy
+            int rozmiar = licznik_2 - 1;
+            long long bufor;
+            for(int a=0; a<rozmiar; a++)
+            {
+                for(int b=0; b<rozmiar; b++)
+                {
+                    if(values_sorted[b]>values_sorted[b+1])
+                    {
+                        bufor = values_sorted[b+1];
+                        values_sorted[b+1] = values_sorted[b];
+                        values_sorted[b] = bufor;
+                    }
+                }
+            }
+            //Wyświetlanie od najmniejszego
+            for(int j=0; j<licznik; j++)
+            {
+                for(int k=0; k<licznik; k++)
+                {
+                    if(values_sorted[j]==values[k])
+                    {
+                        cout << tab1[k] << endl;
+                    }
                 }
             }
         }
-        cout << "Wybrane pliki w kolejności od najmniejszego" << endl;
-        for(int d=0; d<ile; d++)
+        else if(choice==2)
         {
-            for(int e=0; e<licznik; e++)
+            cout << "Pliki o rozmiarze mniejszym niż zadany z klawiatury." << endl;
+            cout << "Pliki wyświetlone w kolejności od pliku o najmniejszym rozmiarze rosnąco!" << endl;
+            cout << endl;
+            for(int i=0; i<licznik_2; i++)
             {
-                if(value_choosen[d]==value[e])
+                if(size>values[i])
                 {
-                    cout << tab1[e] << endl;
+                    values_sorted[help] = values[i];
+                    help = help + 1;
+                }
+            }
+            //Sortowanie tablicy
+            int rozmiar = licznik_2 - 1;
+            long long bufor;
+            for(int a=0; a<rozmiar; a++)
+            {
+                for(int b=0; b<rozmiar; b++)
+                {
+                    if(values_sorted[b]>values_sorted[b+1])
+                    {
+                        bufor = values_sorted[b+1];
+                        values_sorted[b+1] = values_sorted[b];
+                        values_sorted[b] = bufor;
+                    }
+                }
+            }
+            //Wyświetlanie od najmniejszego
+            for(int j=0; j<licznik; j++)
+            {
+                for(int k=0; k<licznik; k++)
+                {
+                    if(values_sorted[j]==values[k])
+                    {
+                        cout << tab1[k] << endl;
+                    }
                 }
             }
         }
+        else if(choice==3)
+        {
+            cout << "Pliki o rozmiarze równym jak zadany z klawiatury." << endl;
+            cout << "Pliki wyświetlone w kolejności od pliku o najmniejszym rozmiarze rosnąco!" << endl;
+            cout << endl;
+            for(int i=0; i<licznik_2; i++)
+            {
+                if(size==values[i])
+                {
+                    values_sorted[help] = values[i];
+                    help = help + 1;
+                }
+            }
+            //Wyświetlanie 
+            for(int j=0; j<licznik; j++)
+            {
+                for(int k=0; k<licznik; k++)
+                {
+                    if(values_sorted[j]==values[k])
+                    {
+                        cout << tab1[k] << endl;
+                    }
+                }
+            }
+        }
+        else
+        {
+            comparison_size(name, licznik);   
+        }
+        cout << endl;
         delete[] tab1;
-        delete[] tab2;
-        delete[] value;
-        delete[] value_choosen;
+        delete[] values;
+        delete[] values_sorted;
     }
     else
     {
