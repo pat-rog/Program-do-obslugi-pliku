@@ -36,11 +36,11 @@ void start()
     {
         case 1:
         {
+            cout << "Wybór: ";
             cin >> name;
             file.open(name, ios::in | ios::out);
             if(file.good() == true)
             {
-                //check(name);
                 file.close();
                 menu(name, licznik);
             }
@@ -50,7 +50,7 @@ void start()
                 
                 start();
             }
-           // break;
+            break;
         }
         case 2:
         {
@@ -312,15 +312,15 @@ void comparison_size(char name[100], int licznik)
         cout << "Podaj wielkość pliku: ";
         cin >> size;
         cout << endl;
-        cout << "|--------------------------------------------------------------------------------|" << endl;
-        cout << "| Wybierz polecenie, podając odpowiednią cyfrę:                                  |" << endl;
-        cout << "|--------------------------------------------------------------------------------|" << endl;
-        cout << "| 1. Wypisz pliki, których wielkość jest większa od zadanej z klawiatury.        |" << endl;
-        cout << "|--------------------------------------------------------------------------------|" << endl;
-        cout << "| 2. Wypisz pliki, których wielkość jest mniejsza od zadanej z klawiatury.       |" << endl;
-        cout << "|--------------------------------------------------------------------------------|" << endl;
-        cout << "| 3. Wypisz pliki, których wielkość jest równa zadanej z klawiatury.             |" << endl;
-        cout << "|--------------------------------------------------------------------------------|" << endl;
+        cout << "|-----------------------------------------------------------------------------|" << endl;
+        cout << "| Wybierz polecenie, podając odpowiednią cyfrę:                               |" << endl;
+        cout << "|-----------------------------------------------------------------------------|" << endl;
+        cout << "| 1. Wypisz pliki, których wielkość jest większa od zadanej z klawiatury.     |" << endl;
+        cout << "|-----------------------------------------------------------------------------|" << endl;
+        cout << "| 2. Wypisz pliki, których wielkość jest mniejsza od zadanej z klawiatury.    |" << endl;
+        cout << "|-----------------------------------------------------------------------------|" << endl;
+        cout << "| 3. Wypisz pliki, których wielkość jest równa zadanej z klawiatury.          |" << endl;
+        cout << "|-----------------------------------------------------------------------------|" << endl;
         cout << endl;
         int choice;
         cin >> choice;
@@ -587,12 +587,20 @@ void comparison_change(char name[100], int licznik)
         int indeks;
         int rozmiar;
         int l; //zmienna pomocnicza
-        cout << "Wybierz właściwe polecenie 1 - 3" << endl;
-        cout << "1. Wyświetl pliki o czasie modyfikacji wcześniejszym niż ten podany z klawiatury" << endl;
-        cout << "2. Wyświetl pliki o czasie modyfikacji późniejszym niż ten podany z klawiatury" << endl;
-        cout << "3. Wyświetl pliki o czasie modyfikacji takim samym jak ten podany z klawiatury" << endl;
+        cout << endl;
+        cout << "|-------------------------------------------------------------------------------------|" << endl;
+        cout << "|Wybierz właściwe polecenie 1 - 3                                                     |" << endl;
+        cout << "|-------------------------------------------------------------------------------------|" << endl;
+        cout << "|1. Wyświetl pliki o czasie modyfikacji wcześniejszym niż ten podany z klawiatury     |" << endl;
+        cout << "|-------------------------------------------------------------------------------------|" << endl;
+        cout << "|2. Wyświetl pliki o czasie modyfikacji późniejszym niż ten podany z klawiatury       |" << endl;
+        cout << "|-------------------------------------------------------------------------------------|" << endl;
+        cout << "|3. Wyświetl pliki o czasie modyfikacji takim samym jak ten podany z klawiatury       |" << endl;
+        cout << "|-------------------------------------------------------------------------------------|" << endl;
+        cout << endl;
+        cout << "Wybór: ";
         cin >> polecenie;
-
+        cout << endl;
         switch(polecenie)
         {
             case 1:
@@ -701,6 +709,7 @@ void comparison_change(char name[100], int licznik)
 
             }
         }
+        cout << endl;
         ////////////////////////////////////
         delete[] tab1;
         delete[] date_choosen;
@@ -756,13 +765,13 @@ void files(char name[100], int licznik)
                                 line_6 = line_2;
                                 line_7 = line_2;
                                 line_4.erase(1);
-                                tab3[licznik_2] = line_4;
+                                tab3[licznik_2] = line_4; //1 znak
                                 line_5.erase(2);
-                                tab4[licznik_2] = line_5;
+                                tab4[licznik_2] = line_5; //2 znaki
                                 line_6.erase(3);
-                                tab5[licznik_2] = line_6;
+                                tab5[licznik_2] = line_6; //3 znaki
                                 line_7.erase(4);
-                                tab6[licznik_2] = line_7;
+                                tab6[licznik_2] = line_7; //4 znaki
                                 licznik_2 = licznik_2 + 1;
                                 line_2 = ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
                                 line_4 = "";
@@ -777,94 +786,80 @@ void files(char name[100], int licznik)
             line_1= ""; //uwzględnia fakt, ze zawartosc pliku większa od przeznaczonego miejsca na program
         }
         file.close();
-        //Podanie liczby plików
-        cout << "Ilość plików, które chcesz wypisać: ";
-        int ile;
-        cin >> ile;
+        //Podanie frazy
+        string fraza;
+        cout << endl;
+        cout << "Fraza ";
+        cin >> fraza;
+        cout << endl;
         //Podanie ilości znaków
         int choice;
-        cout << "Wybierz z ilu pierwszych znaków nazwy pliku ma składać się podana fraza: " << endl;
-        cout << "Wybierz 1, jeśli fraza zawiera pierwszy znak z nazwy pliku" << endl;
-        cout << "Wybierz 2, jeśli fraza zawiera dwa pierwsze znaki z nazwy pliku" << endl;
-        cout << "Wybierz 3, jeśli fraza zawiera trzy pierwsze znaki z nazwy pliku" << endl;
-        cout << "Wybierz 4, jeśli fraza zawiera cztery pierwsze znaki z nazwy pliku" << endl;
+        cout << endl;
+        cout << "|--------------------------------------------------------------------------|" << endl;
+        cout << "|Wybierz z ilu pierwszych znaków nazwy pliku ma składać się podana fraza:  |" << endl;
+        cout << "|--------------------------------------------------------------------------|" << endl;
+        cout << "|Wybierz 1, jeśli fraza zawiera pierwszy znak z nazwy pliku                |" << endl;
+        cout << "|--------------------------------------------------------------------------|" << endl;
+        cout << "|Wybierz 2, jeśli fraza zawiera dwa pierwsze znaki z nazwy pliku           |" << endl;
+        cout << "|--------------------------------------------------------------------------|" << endl;
+        cout << "|Wybierz 3, jeśli fraza zawiera trzy pierwsze znaki z nazwy pliku          |" << endl;
+        cout << "|--------------------------------------------------------------------------|" << endl;
+        cout << "|Wybierz 4, jeśli fraza zawiera cztery pierwsze znaki z nazwy pliku        |" << endl;
+        cout << "|--------------------------------------------------------------------------|" << endl;
+        cout << endl;
+        cout << "Wybór: ";
         cin >> choice;
-        string *fraza = new string[ile]; 
-        for(int j=0; j<ile; j++)
+        cout << endl;
+        if(choice==1)
         {
-            cout << "Fraza: ";
-            cin >> fraza[j];
+            for(int i=0; i<licznik_2; i++)
+            {
+                if(fraza==tab3[i])
+                {
+                    cout << tab1[i] << endl;
+                }
+            }
         }
-        switch(choice)
+        else if(choice==2)
         {
-            case 1:
+            for(int i=0; i<licznik_2; i++)
             {
-                for(int a=0; a<ile; a++)
+                if(fraza==tab4[i])
                 {
-                    for(int b=0; b<licznik_2; b++)
-                    {
-                        if(fraza[a]==tab3[b])
-                        {
-                            cout << tab1[b] << endl;
-                        }
-                    }
+                    cout << tab1[i] << endl;
                 }
-                break;
             }
-            case 2:
+        }
+        else if(choice==3)
+        {
+            for(int i=0; i<licznik_2; i++)
             {
-                for(int a=0; a<ile; a++)
+                if(fraza==tab5[i])
                 {
-                    for(int b=0; b<licznik_2; b++)
-                    {
-                        if(fraza[a]==tab4[b])
-                        {
-                            cout << tab1[b] << endl;
-                        }
-                    }
+                    cout << tab1[i] << endl;
                 }
-                break;
             }
-            case 3:
+        }
+        else if(choice==4)
+        {
+            for(int i=0; i<licznik_2; i++)
             {
-                for(int a=0; a<ile; a++)
+                if(fraza==tab6[i])
                 {
-                    for(int b=0; b<licznik_2; b++)
-                    {
-                        if(fraza[a]==tab5[b])
-                        {
-                            cout << tab1[b] << endl;
-                        }
-                    }
+                    cout << tab1[i] << endl;
                 }
-                break;
             }
-            case 4:
-            {
-                for(int a=0; a<ile; a++)
-                {
-                    for(int b=0; b<licznik_2; b++)
-                    {
-                        if(fraza[a]==tab6[b])
-                        {
-                            cout << tab1[b] << endl;
-                        }
-                    }
-                }
-                break;
-            }
-            default:
-            {
-                files(name,licznik);
-            }
-
+        }
+        else
+        {
+            cout << "Niezgodnie z instrukcją użytkownik wpisał dane";
+            files(name, licznik);
         }
         delete[] tab1;
         delete[] tab3;
         delete[] tab4;
         delete[] tab5;
         delete[] tab6;
-        delete[] fraza;
     }
     else
     {
